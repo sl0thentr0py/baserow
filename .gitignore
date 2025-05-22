@@ -151,3 +151,6 @@ premium/web-frontend/package.json
 # Storybook
 web-frontend/.nuxt-storybook/
 web-frontend/storybook-static
+
+.pnp*
+.yarn*

@@ -390,6 +390,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     CLIENT_SESSION_ID_HEADER,
     CLIENT_UNDO_REDO_ACTION_GROUP_ID_HEADER,
     USER_SOURCE_AUTHENTICATION_HEADER,
+    "sentry-trace",
+    "baggage",
 ]
 
 ACCESS_TOKEN_LIFETIME = timedelta(
@@ -1212,10 +1214,13 @@ SENTRY_DENYLIST = DEFAULT_DENYLIST + ["username", "email", "name"]
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
+        debug=True,
+        traces_sample_rate=1.0,
         integrations=[DjangoIntegration(signals_spans=False, middleware_spans=False)],
         send_default_pii=False,
         event_scrubber=EventScrubber(recursive=True, denylist=SENTRY_DENYLIST),
         environment=os.getenv("SENTRY_ENVIRONMENT", ""),
+        release=f"baserot-{sentry_sdk.VERSION}",
     )
 
 BASEROW_OPENAI_API_KEY = os.getenv("BASEROW_OPENAI_API_KEY", None)

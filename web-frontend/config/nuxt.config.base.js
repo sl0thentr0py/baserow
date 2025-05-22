@@ -8,9 +8,9 @@ export default function (
   const additionalModulesCsv = process.env.ADDITIONAL_MODULES
   const additionalModules = additionalModulesCsv
     ? additionalModulesCsv
-        .split(',')
-        .map((m) => m.trim())
-        .filter((m) => m !== '')
+      .split(',')
+      .map((m) => m.trim())
+      .filter((m) => m !== '')
     : []
 
   if (additionalModules.length > 0) {
@@ -30,7 +30,6 @@ export default function (
       enterpriseBase + '/modules/baserow_enterprise/module.js'
     )
   }
-  baseModules.push('@nuxtjs/sentry')
 
   const modules = baseModules.concat(additionalModules)
   return {
@@ -40,18 +39,6 @@ export default function (
       '@nuxtjs/svg',
       '@nuxtjs/composition-api/module',
     ],
-    sentry: {
-      clientIntegrations: {
-        Dedupe: {},
-        ExtraErrorData: {},
-        RewriteFrames: {},
-        ReportingObserver: null,
-      },
-      clientConfig: {
-        attachProps: true,
-        logErrors: true,
-      },
-    },
     build: {
       extend(config, ctx) {
         config.node = { fs: 'empty' }
@@ -73,6 +60,7 @@ export default function (
         'vue-chartjs',
         'chart.js',
         '@vue2-flow/core',
+        'sentry',
       ],
     },
   }

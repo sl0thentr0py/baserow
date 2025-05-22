@@ -18,6 +18,8 @@ RUN apt-get update && \
     tini \
     git \
     gosu \
+    vim \
+    ripgrep \
     && apt-get autoclean \
     && apt-get clean \
     && apt-get autoremove \

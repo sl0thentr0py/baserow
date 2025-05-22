@@ -64,12 +64,6 @@ export default function CoreModule(options) {
   }
 
   this.options.publicRuntimeConfig = {
-    sentry: {
-      config: {
-        dsn: process.env.SENTRY_DSN || '',
-        environment: process.env.SENTRY_ENVIRONMENT || '',
-      },
-    },
     BASEROW_DISABLE_PUBLIC_URL_CHECK:
       process.env.BASEROW_DISABLE_PUBLIC_URL_CHECK ?? false,
     PUBLIC_BACKEND_URL:
@@ -112,32 +106,6 @@ export default function CoreModule(options) {
   this.options.publicRuntimeConfig.BASEROW_EMBEDDED_SHARE_URL =
     process.env.BASEROW_EMBEDDED_SHARE_URL ??
     this.options.publicRuntimeConfig.PUBLIC_WEB_FRONTEND_URL
-
-  this.requireModule([
-    '@nuxtjs/sentry',
-    {
-      // We want the `SENTRY_DSN` environment variable to work on runtime. If a
-      // valid DSN is not provided during build, it will build with a mocked
-      // instance. To make sure the environment variable is accepted, we must
-      // prevent that during build. Providing a fake DSN will have no impact because
-      // the environment variable fallback is an empty string, tso then it will be
-      // disabled.
-      dsn: 'https://public@sentry.com/1',
-      clientIntegrations: {
-        Dedupe: {},
-        ExtraErrorData: {},
-        RewriteFrames: {},
-        Replay: {},
-        ReportingObserver: null,
-      },
-      clientConfig: {
-        replaysSessionSampleRate: 0,
-        replaysOnErrorSampleRate: 1.0,
-        attachProps: true,
-        logErrors: true,
-      },
-    },
-  ])
 
   const locales = [
     { code: 'en', name: 'English', file: 'en.json' },
@@ -186,6 +154,7 @@ export default function CoreModule(options) {
   this.addLayout(path.resolve(__dirname, 'layouts/app.vue'), 'app')
   this.addLayout(path.resolve(__dirname, 'layouts/login.vue'), 'login')
 
+  this.addPlugin({ src: path.resolve(__dirname, 'plugins/01.sentry.client.js') })
   this.addPlugin({ src: path.resolve(__dirname, 'plugins/global.js') })
   this.addPlugin({
     src: path.resolve(__dirname, 'plugins/vue2-smooth-scroll.js'),
